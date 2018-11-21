@@ -5,7 +5,6 @@ import numpy as np
 assert(len(sys.argv) > 1), "Pass the name of the image as an argument"
 
 """ works only for grayscale images """
-""" edges are most visible in grayscale images """
 def getNewPixelValue(im, pixel_y, pixel_x, kernel):
     pixel_val = 0
 

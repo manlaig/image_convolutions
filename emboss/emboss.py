@@ -5,16 +5,14 @@ import numpy as np
 assert(len(sys.argv) > 1), "Pass the name of the image as an argument"
 
 """ works only for grayscale images """
-""" edges are most visible in grayscale images """
 def getNewPixelValue(im, pixel_y, pixel_x, kernel):
     pixel_val = 0
 
     for i in range(-1, 2, 1):
         for j in range(-1, 2, 1):
             if pixel_x + j < 0 or pixel_y + i < 0:
-                continue
-            if (max(pixel_x + j, im.shape[1] - 1) != pixel_x + j
-                and max(pixel_y + i, im.shape[0] - 1) != pixel_y + i):
+                pass
+            elif (pixel_x + j < im.shape[1] - 1 and pixel_y + i < im.shape[0] - 1):
                pixel_val += im[pixel_y + i][pixel_x + j] * kernel[i + 1][j + 1]
     return max(pixel_val, 0)
 
