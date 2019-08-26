@@ -1,6 +1,5 @@
 """
-This the implementation of Floyd-Steinberg dithering algorithm
-NOTE: only use with grayscale images
+This is the implementation of Floyd-Steinberg dithering algorithm
 """
 
 import sys
@@ -17,20 +16,22 @@ possible_colors = 3
 
 for i in range(im_matrix.shape[0]):
     for j in range(im_matrix.shape[1]):
-            threshholded[i][j] = round(im_matrix[i][j] / 255. * possible_colors) * 255. / possible_colors
+        for k in range(im_matrix.shape[2]):
+            threshholded[i][j][k] = round(im_matrix[i][j][k] / 255. * possible_colors) * 255. / possible_colors
 
-for i in range(1,len(threshholded)-1,1):
-    for j in range(1,len(threshholded[i])-1,1):
-        if(threshholded[i][j] > 255):
-            threshholded[i][j] = 255
-        elif(threshholded[i][j] < 0):
-            threshholded[i][j] = 0
+for i in range(im_matrix.shape[0]-1):
+    for j in range(im_matrix.shape[1]-1):
+        for k in range(im_matrix.shape[2]-1):
+            if(threshholded[i][j][k] > 255):
+                threshholded[i][j][k] = 255
+            elif(threshholded[i][j][k] < 0):
+                threshholded[i][j][k] = 0
 
-        diff = im_matrix[i][j] - threshholded[i][j]
-        threshholded[i][j+1] += diff * 7 / 16
-        threshholded[i+1][j-1] += diff * 3 / 16
-        threshholded[i+1][j] += diff * 5 / 16
-        threshholded[i+1][j+1] += diff * 1 / 16
+            diff = im_matrix[i][j][k] - threshholded[i][j][k]
+            threshholded[i][j+1][k] = int(diff * 7. / 16. + threshholded[i][j+1][k])
+            threshholded[i+1][j-1][k] = int(diff * 3. / 16. + threshholded[i+1][j-1][k])
+            threshholded[i+1][j][k] = int(diff * 5. / 16. + threshholded[i+1][j][k])
+            threshholded[i+1][j+1][k] = int(diff * 1. / 16. + threshholded[i+1][j+1][k])
 
 output = Image.fromarray(np.uint8(threshholded))
 output.show()
